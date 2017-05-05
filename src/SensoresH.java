@@ -2,6 +2,8 @@
 
 public class SensoresH {
     private boolean[] sensores;
+    private int[] temp;
+    private int[] rad;
     private boolean statusOk;
 
     public SensoresH(){
@@ -9,28 +11,37 @@ public class SensoresH {
         statusOk = true;
     }
 
-    public void setAlerta(int index, boolean alerta) throws IndexOutOfBoundsException{
+    public void setH(int index, boolean alerta) throws IndexOutOfBoundsException{
         if (index < 0 || index > 9){
             throw new IndexOutOfBoundsException("Sensor inexistente");
         }
 
         sensores[index] = alerta;
     }
+    
+    public void setTemp(int index, int temp){
+    	if (index < 0 || index > 9){
+            throw new IndexOutOfBoundsException("Sensor inexistente");
+        }
+    	
+    	this.temp[index] = temp;
+    }
 
+    public void setRad(int index, int rad) {
+		this.rad[index] = rad;
+	}
+    
 
-    public boolean isAlerta(int index) {
+    public boolean isH(int index) {
         return sensores[index];
     }
-
-    public void reset() {
-        for (int i = 0; i < sensores.length; i++) {
-            sensores[i] = false;
-        }
-        statusOk = true;
-    }
-
-    public boolean isStatusOk() {
-        return statusOk;
-    }
+    
+    private int isAlerta(int index) {
+    	if (!sensores[index]) return 0;
+		if (rad[index] > 7) return 3;
+		if (rad[index] > 5 || temp[index] > 40) return 2;
+		if (rad[index] > 1 || temp[index] > 30) return 1;
+		return 0;
+	}
 
 }
